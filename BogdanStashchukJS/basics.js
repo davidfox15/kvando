@@ -1,31 +1,52 @@
-function say(noise) {
-  console.log(noise);
-}
+// Логические операторы ! && ||
+// Трюк с логическим оператором &&
 
-function cloneAnimal(animal) {
-  let newAnimal = JSON.parse(JSON.stringify(animal));
-  return newAnimal;
-}
+true && console.log('Выполненно');
 
-const Dog = {
-  age: 5,
-  say() {
-    say("roof");
-  },
+// Оператор разделения обьекта на свойства
+// Добавление свойства в обьект с помощью оператора ...
+
+const button = {
+  width: 200,
+  text: 'Buy',
 };
 
-const Cat = {
-  age: 3,
-  say() {
-    say("meow");
-  },
+const redButton = {
+  ...button,
+  color: 'red',
 };
 
-// Вывод всех свойств обьекта
-console.dir(Cat);
-// Вывод всех свойств в табличном виде
-console.table(Dog);
+console.table(redButton);
 
-Cat.say();
+// Создание кнопки из обьекта кнопки и обьекта со стилем для кнопки
 
-const Cat2 = cloneAnimal(Cat);
+const buttonInfo = {
+  text: 'Buy',
+};
+
+const buttonStyle = {
+  color: 'yellow',
+  width: 200,
+  height: 300,
+};
+
+const newButton = {
+  ...buttonInfo,
+  ...buttonStyle,
+};
+
+console.table(button);
+
+// Конкатенация строк
+
+const hello = 'Hello';
+const world = 'World';
+
+const greeting = hello + ' ' + world;
+console.log(greeting);
+
+// Шаблонные строки
+let name = 'Давид';
+let city = 'Брянск';
+const message = `${name} из ${city}`;
+console.log(message);
