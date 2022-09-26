@@ -1,52 +1,49 @@
-// Логические операторы ! && ||
-// Трюк с логическим оператором &&
+// Функциональные выражения (анонимное)
 
-true && console.log('Выполненно');
-
-// Оператор разделения обьекта на свойства
-// Добавление свойства в обьект с помощью оператора ...
-
-const button = {
-  width: 200,
-  text: 'Buy',
+let sum = function (a, b) {
+  return a + b;
 };
 
-const redButton = {
-  ...button,
-  color: 'red',
+console.log(sum(10, 5));
+
+// Колбэк-функция
+
+setTimeout(function () {
+  console.log('Отложенное сообщение');
+}, 1000);
+
+// Стрелочная функция
+
+const superWord = word => {
+  return 'Super ' + word;
 };
 
-console.table(redButton);
+console.log(superWord('кот'));
 
-// Создание кнопки из обьекта кнопки и обьекта со стилем для кнопки
+// Сокращения в стрелочных функциях
 
-const buttonInfo = {
-  text: 'Buy',
-};
+mul10 = number => number * 10;
+console.log(mul10(8));
 
-const buttonStyle = {
-  color: 'yellow',
-  width: 200,
-  height: 300,
-};
+// Значение параметров по умолчанию
 
-const newButton = {
-  ...buttonInfo,
-  ...buttonStyle,
-};
+function multByFactor(value, multiplier = 1) {
+  return value * multiplier;
+}
 
-console.table(button);
+console.log(multByFactor(10));
+console.log(multByFactor(10,4));
 
-// Конкатенация строк
+// Преимущество параметров по умолчанию 
 
-const hello = 'Hello';
-const world = 'World';
+const newPost = (post, addedAt = Date()) => ({
+  ...post,
+  addedAt,
+})
 
-const greeting = hello + ' ' + world;
-console.log(greeting);
+const firstPost = {
+  id: 1,
+  author: 'Bogdan',
+}
 
-// Шаблонные строки
-let name = 'Давид';
-let city = 'Брянск';
-const message = `${name} из ${city}`;
-console.log(message);
+console.dir(newPost(firstPost));
