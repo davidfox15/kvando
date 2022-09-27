@@ -32,18 +32,29 @@ function multByFactor(value, multiplier = 1) {
 }
 
 console.log(multByFactor(10));
-console.log(multByFactor(10,4));
+console.log(multByFactor(10, 4));
 
-// Преимущество параметров по умолчанию 
+// Преимущество параметров по умолчанию
 
 const newPost = (post, addedAt = Date()) => ({
   ...post,
   addedAt,
-})
+});
 
 const firstPost = {
   id: 1,
   author: 'Bogdan',
-}
+};
 
 console.dir(newPost(firstPost));
+
+const newPostWithReturn = (post, addedAt = Date()) => {
+  return { ...post, addedAt };
+};
+
+const secondPost = {
+  id: 2,
+  author: 'Ilya',
+};
+
+console.dir(newPostWithReturn(secondPost));
