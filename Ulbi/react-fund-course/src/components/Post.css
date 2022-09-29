@@ -1,0 +1,15 @@
+.Post {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 15px;
+  border: 2px solid teal;
+  margin-top: 15px;
+  justify-content: space-between;
+}
+
+.Post-Name {
+  text-align: center;
+  font-weight: bold;
+  text-decoration: underline;
+}
