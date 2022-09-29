@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import CustomButton from './UI/button/CustomButton';
+import CustomInput from './UI/input/CustomInput';
+import './PostForm.css';
 
 export default function PostForm(props) {
   const [title, setTitle] = useState('');
@@ -21,29 +24,27 @@ export default function PostForm(props) {
   }
 
   return (
-    <div>
-      <form>
-        <input
-          type="text"
-          placeholder="Введите название"
-          value={title}
-          onChange={event => updateTitleInput(event.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Введите текст поста"
-          value={text}
-          onChange={event => updateTextInput(event.target.value)}
-        />
-        <button
-          onClick={event => {
-            event.preventDefault();
-            addPost();
-          }}
-        >
-          Добавить пост
-        </button>
-      </form>
-    </div>
+    <form className="PostForm">
+      <CustomInput
+        type="text"
+        placeholder="Введите название"
+        value={title}
+        onChange={event => updateTitleInput(event.target.value)}
+      />
+      <CustomInput
+        type="text"
+        placeholder="Введите текст поста"
+        value={text}
+        onChange={event => updateTextInput(event.target.value)}
+      />
+      <CustomButton
+        onClick={event => {
+          event.preventDefault();
+          addPost();
+        }}
+      >
+        Добавить пост
+      </CustomButton>
+    </form>
   );
 }
