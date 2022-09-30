@@ -1,23 +1,27 @@
 import { useState } from 'react';
 import './App.css';
+import ErrorBox from './components/ErrorBox';
 import PostForm from './components/PostForm';
 import PostList from './components/PostList';
+import CustomSelect from './components/UI/select/CustomSelect';
 
 function App() {
   const [posts, setPosts] = useState([
-    { id: 1, name: 'React', text: 'A JavaScript library for building user interfaces.' },
+    { id: 1, title: 'React', text: 'A JavaScript library for building user interfaces.' },
     {
       id: 2,
-      name: 'Vue',
+      title: 'Vue',
       text: 'An approachable, performant and versatile framework for building web user interfaces.',
     },
-    { id: 3, name: 'Angular', text: 'Angular is a platform for building mobile and desktop web applications.' },
+    { id: 3, title: 'Angular', text: 'Angular is a platform for building mobile and desktop web applications.' },
     {
       id: 4,
-      name: 'JS Vanilla',
+      title: 'JS Vanilla',
       text: 'Vanilla JS is a fast, lightweight, cross-platform framework for building incredible, powerful JavaScript applications.',
     },
   ]);
+
+  const [selectedSort, setSelectSort] = useState('');
 
   function getLastID() {
     const lastID = posts.reduce((res, post) => (res < post.id ? post.id : res), 0);
@@ -33,10 +37,39 @@ function App() {
     setPosts(posts.filter(currentPost => currentPost.id !== post.id));
   }
 
+  function sortPosts(sort) {
+    setSelectSort(sort);
+    setPosts(
+      [...posts].sort((a, b) => {
+        if (typeof a[sort] === 'number' && typeof b[sort] === 'number') {
+          if (a[sort] < b[sort]) return -1;
+          if (a[sort] > b[sort]) return 1;
+          return 0;
+        } else {
+          return a[sort].localeCompare(b[sort]);
+        }
+      })
+    );
+  }
+
   return (
-    <div>
+    <div className="App">
       <PostForm addPostCallback={addNewPost} />
-      <PostList deletePostCallback={deletePost} title={'Programming Languages'} posts={posts} />
+      <CustomSelect
+        defaultValue={'Сортировка по'}
+        options={[
+          { value: 'id', name: 'По id' },
+          { value: 'title', name: 'По заголовку' },
+          { value: 'text', name: 'По тексту' },
+        ]}
+        value={selectedSort}
+        onChange={sortPosts}
+      />
+      {posts.length !== 0 ? (
+        <PostList deletePostCallback={deletePost} title={'Programming Languages'} posts={posts} />
+      ) : (
+        <ErrorBox errorMessage={'Нет постов'} />
+      )}
     </div>
   );
 }
