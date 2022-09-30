@@ -29,10 +29,14 @@ function App() {
     setPosts([...posts, post]);
   }
 
+  function deletePost(post) {
+    setPosts(posts.filter(currentPost => currentPost.id !== post.id));
+  }
+
   return (
     <div>
       <PostForm addPostCallback={addNewPost} />
-      <PostList title={'Programming Languages'} posts={posts} />
+      <PostList deletePostCallback={deletePost} title={'Programming Languages'} posts={posts} />
     </div>
   );
 }

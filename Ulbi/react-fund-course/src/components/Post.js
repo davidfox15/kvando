@@ -1,7 +1,7 @@
 import React from 'react';
 import './Post.css';
 
-export default function Post(props) {
+export default function Post({ deletePostCallback, ...props }) {
   const { id, name, text } = props.post;
   return (
     <div className="Post">
@@ -9,6 +9,9 @@ export default function Post(props) {
         {id}. {name}
       </h3>
       <span className="Post-Text">{text}</span>
+      <button className="Post-DeleteButton" onClick={() => deletePostCallback(props.post)}>
+        delete
+      </button>
     </div>
   );
 }

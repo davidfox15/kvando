@@ -21,7 +21,6 @@ export default function PostForm(props) {
 
   function checkValidInput() {
     const re = /^\S+(\w|\s)*\S$/;
-
     if (re.exec(post.title) && re.exec(post.text)) return true;
     return false;
   }

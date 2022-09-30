@@ -6,10 +6,18 @@
   border: 2px solid teal;
   margin-top: 15px;
   justify-content: space-between;
+  border-radius: 5px;
 }
 
 .Post-Name {
   text-align: center;
   font-weight: bold;
   text-decoration: underline;
+}
+
+.Post-DeleteButton {
+  width: 20%;
+  background-color: rgb(255, 110, 110);
+  border-radius: 5px;
+  border: none;
 }
