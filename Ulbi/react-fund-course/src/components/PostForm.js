@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import CustomButton from './UI/button/CustomButton';
 import CustomInput from './UI/input/CustomInput';
 import './PostForm.css';
@@ -6,6 +6,7 @@ import './PostForm.css';
 export default function PostForm(props) {
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
+  let bodyInputRef = useRef();
 
   function updateTitleInput(inputValue) {
     setTitle(inputValue);
@@ -20,11 +21,17 @@ export default function PostForm(props) {
       title: title,
       text: text,
     };
+    console.log(bodyInputRef.current.value);
     props.addPostCallback(post);
   }
 
   return (
     <form className="PostForm">
+      <CustomInput
+        type="text"
+        placeholder="Введите название"
+        ref={bodyInputRef}
+      />
       <CustomInput
         type="text"
         placeholder="Введите название"

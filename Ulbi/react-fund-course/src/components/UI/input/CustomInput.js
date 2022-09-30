@@ -1,10 +1,12 @@
 import React from 'react';
 import classes from './CustomInput.module.css';
 
-export default function CustomInput({ children, ...props }) {
+const CustomInput = React.forwardRef(({ children, ...props }, ref) => {
   return (
-    <input {...props} className={classes.myInput}>
+    <input ref={ref} {...props} className={classes.myInput}>
       {children}
     </input>
   );
-}
+});
+
+export default CustomInput;
