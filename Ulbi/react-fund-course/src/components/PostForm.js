@@ -1,28 +1,42 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import CustomButton from './UI/button/CustomButton';
 import CustomInput from './UI/input/CustomInput';
+import ErrorBox from './ErrorBox';
 import './PostForm.css';
 
 export default function PostForm(props) {
-  const [title, setTitle] = useState('');
-  const [text, setText] = useState('');
-  let bodyInputRef = useRef();
+  const [post, setPost] = useState({
+    title: '',
+    text: '',
+  });
+  const [inputError, setInputError] = useState('');
 
   function updateTitleInput(inputValue) {
-    setTitle(inputValue);
+    setPost({ ...post, title: inputValue });
   }
 
   function updateTextInput(inputValue) {
-    setText(inputValue);
+    setPost({ ...post, text: inputValue });
+  }
+
+  function checkValidInput() {
+    const re = /^\S+(\w|\s)*\S$/;
+
+    if (re.exec(post.title) && re.exec(post.text)) return true;
+    return false;
   }
 
   function addPost() {
-    const post = {
-      title: title,
-      text: text,
-    };
-    console.log(bodyInputRef.current.value);
-    props.addPostCallback(post);
+    setInputError('');
+    if (checkValidInput()) {
+      props.addPostCallback(post);
+      setPost({
+        title: '',
+        text: '',
+      });
+    } else {
+      setInputError('Invalid Input');
+    }
   }
 
   return (
@@ -30,18 +44,13 @@ export default function PostForm(props) {
       <CustomInput
         type="text"
         placeholder="Введите название"
-        ref={bodyInputRef}
-      />
-      <CustomInput
-        type="text"
-        placeholder="Введите название"
-        value={title}
+        value={post.title}
         onChange={event => updateTitleInput(event.target.value)}
       />
       <CustomInput
         type="text"
         placeholder="Введите текст поста"
-        value={text}
+        value={post.text}
         onChange={event => updateTextInput(event.target.value)}
       />
       <CustomButton
@@ -52,6 +61,7 @@ export default function PostForm(props) {
       >
         Добавить пост
       </CustomButton>
+      {inputError && <ErrorBox errorMessage={inputError} />}
     </form>
   );
 }
