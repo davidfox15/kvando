@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import './App.css';
 import ErrorBox from './components/ErrorBox';
 import PostForm from './components/PostForm';
@@ -24,7 +24,7 @@ function App() {
   const [selectedSort, setSelectSort] = useState('');
   const [search, setSearch] = useState('');
 
-  const sortedPosts = getSortedPosts();
+  const sortedPosts = useMemo(() => getSortedPosts(), [selectedSort, posts, search])
 
   function getLastID() {
     const lastID = posts.reduce((res, post) => (res < post.id ? post.id : res), 0);
@@ -72,6 +72,7 @@ function App() {
   return (
     <div className="App">
       <PostForm addPostCallback={addNewPost} />
+      <hr className="Divide" />
       <div>
         <CustomInput type="text" value={search} onChange={event => setSearch(event.target.value)} />
         <CustomSelect
@@ -85,7 +86,7 @@ function App() {
           onChange={sort => setSelectSort(sort)}
         />
       </div>
-      {posts.length !== 0 ? (
+      {sortedPosts.length !== 0 ? (
         <PostList deletePostCallback={deletePost} title={'Programming Languages'} posts={sortedPosts} />
       ) : (
         <ErrorBox errorMessage={'Нет постов'} />
