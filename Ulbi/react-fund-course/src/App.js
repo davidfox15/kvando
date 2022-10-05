@@ -4,6 +4,7 @@ import ErrorBox from './components/ErrorBox';
 import PostForm from './components/PostForm';
 import PostList from './components/PostList';
 import PostFilter from './components/PostFilter';
+import { compare, includeString } from './logic/filter';
 
 function App() {
   const [posts, setPosts] = useState([
@@ -23,46 +24,37 @@ function App() {
 
   const [filter, setFilter] = useState({ sort: '', search: '' });
 
-  const sortedPosts = useMemo(() => getSortedPosts(), [filter.sort, posts, filter.search]);
+  const sortedPosts = useMemo(() => getPosts(), [filter.sort, posts, filter.search]);
 
-  function getLastID() {
-    const lastID = posts.reduce((res, post) => (res < post.id ? post.id : res), 0);
-    return lastID + 1;
-  }
-
-  function compareStringsAndNumbers(a, b) {
-    if (typeof a === 'number' && typeof b === 'number') {
-      return a === b ? 0 : a > b ? 1 : -1;
-    } else {
-      return a.localeCompare(b);
-    }
-  }
-
-  function filterStringInclude(find, ...items) {
-    let res = false;
-    items.forEach(item => {
-      if (item.toLowerCase().includes(find.toLowerCase())) res = true;
-    });
-    return res;
-  }
-
-  function getSortedPosts() {
+  function getPosts() {
     let sortedPosts = [...posts];
-    if (filter.search)
-      sortedPosts = [...sortedPosts].filter(post => filterStringInclude(filter.search, post.text, post.title));
-    if (filter.sort)
-      sortedPosts = [...sortedPosts].sort((a, b) => compareStringsAndNumbers(a[filter.sort], b[filter.sort]));
+    sortedPosts = getFoundPosts(sortedPosts);
+    sortedPosts = getSortedPosts(sortedPosts);
     return sortedPosts;
   }
 
-  function getFoundPosts() {
-    if (filter.search) return [...posts].filter(post => filterStringInclude(filter.search, post.text, post.title));
-    return posts;
+  function getFoundPosts(tempPosts) {
+    if (filter.search) return [...tempPosts].filter(post => includeString(filter.search, post.text, post.title));
+    return tempPosts;
+  }
+
+  function getSortedPosts(tempPosts) {
+    if (filter.sort)
+      return [...tempPosts].sort((post1, post2) => {
+        const key = filter.sort;
+        return compare(post1[key], post2[key]);
+      });
+    return tempPosts;
   }
 
   function addNewPost(post) {
     post.id = getLastID();
     setPosts([...posts, post]);
+  }
+
+  function getLastID() {
+    const lastID = posts.reduce((res, post) => (res < post.id ? post.id : res), 0);
+    return lastID + 1;
   }
 
   function deletePost(post) {
