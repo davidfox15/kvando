@@ -3,8 +3,7 @@ import './App.css';
 import ErrorBox from './components/ErrorBox';
 import PostForm from './components/PostForm';
 import PostList from './components/PostList';
-import CustomSelect from './components/UI/select/CustomSelect';
-import CustomInput from './components/UI/input/CustomInput';
+import PostFilter from './components/PostFilter';
 
 function App() {
   const [posts, setPosts] = useState([
@@ -21,10 +20,10 @@ function App() {
       text: 'Vanilla JS is a fast, lightweight, cross-platform framework for building incredible, powerful JavaScript applications.',
     },
   ]);
-  const [selectedSort, setSelectSort] = useState('');
-  const [search, setSearch] = useState('');
 
-  const sortedPosts = useMemo(() => getSortedPosts(), [selectedSort, posts, search])
+  const [filter, setFilter] = useState({ sort: '', search: '' });
+
+  const sortedPosts = useMemo(() => getSortedPosts(), [filter.sort, posts, filter.search]);
 
   function getLastID() {
     const lastID = posts.reduce((res, post) => (res < post.id ? post.id : res), 0);
@@ -49,14 +48,15 @@ function App() {
 
   function getSortedPosts() {
     let sortedPosts = [...posts];
-    if (search) sortedPosts = [...sortedPosts].filter(post => filterStringInclude(search, post.text, post.title));
-    if (selectedSort)
-      sortedPosts = [...sortedPosts].sort((a, b) => compareStringsAndNumbers(a[selectedSort], b[selectedSort]));
+    if (filter.search)
+      sortedPosts = [...sortedPosts].filter(post => filterStringInclude(filter.search, post.text, post.title));
+    if (filter.sort)
+      sortedPosts = [...sortedPosts].sort((a, b) => compareStringsAndNumbers(a[filter.sort], b[filter.sort]));
     return sortedPosts;
   }
 
   function getFoundPosts() {
-    if (search) return [...posts].filter(post => filterStringInclude(search, post.text, post.title));
+    if (filter.search) return [...posts].filter(post => filterStringInclude(filter.search, post.text, post.title));
     return posts;
   }
 
@@ -73,19 +73,7 @@ function App() {
     <div className="App">
       <PostForm addPostCallback={addNewPost} />
       <hr className="Divide" />
-      <div>
-        <CustomInput type="text" value={search} onChange={event => setSearch(event.target.value)} />
-        <CustomSelect
-          defaultValue={'Сортировка по'}
-          options={[
-            { value: 'id', name: 'По id' },
-            { value: 'title', name: 'По заголовку' },
-            { value: 'text', name: 'По тексту' },
-          ]}
-          value={selectedSort}
-          onChange={sort => setSelectSort(sort)}
-        />
-      </div>
+      <PostFilter filter={filter} setFilter={setFilter} />
       {sortedPosts.length !== 0 ? (
         <PostList deletePostCallback={deletePost} title={'Programming Languages'} posts={sortedPosts} />
       ) : (

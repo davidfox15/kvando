@@ -44,13 +44,13 @@ export default function PostForm(props) {
         type="text"
         placeholder="Введите название"
         value={post.title}
-        onChange={event => updateTitleInput(event.target.value)}
+        onChange={inputValue => updateTitleInput(inputValue)}
       />
       <CustomInput
         type="text"
         placeholder="Введите текст поста"
         value={post.text}
-        onChange={event => updateTextInput(event.target.value)}
+        onChange={inputValue => updateTextInput(inputValue)}
       />
       <CustomButton
         onClick={event => {
