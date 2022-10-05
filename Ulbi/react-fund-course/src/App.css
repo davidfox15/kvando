@@ -15,5 +15,24 @@
 }
 
 .Divide {
-margin: 5px 0;
+  margin: 5px 0;
+}
+
+.post-enter {
+  opacity: 0;
+  transform: translateX(-350px);
+}
+.post-enter-active {
+  opacity: 1;
+  transform: translateX(0px);
+  transition: all 500ms ease-in;
+}
+.post-exit {
+  opacity: 1;
+  transform: translateX(0px);
+}
+.post-exit-active {
+  opacity: 0;
+  transform: translateX(-350px);
+  transition: all 500ms ease-in;
 }

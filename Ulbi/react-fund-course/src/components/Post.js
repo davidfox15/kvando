@@ -1,5 +1,6 @@
 import React from 'react';
 import './Post.css';
+import CustomButton from './UI/button/CustomButton';
 
 export default function Post({ deletePostCallback, ...props }) {
   const { id, title, text } = props.post;
@@ -9,9 +10,9 @@ export default function Post({ deletePostCallback, ...props }) {
         {id}. {title}
       </h3>
       <span className="Post-Text">{text}</span>
-      <button className="Post-DeleteButton" onClick={() => deletePostCallback(props.post)}>
+      <CustomButton className="Post-DeleteButton" onClick={() => deletePostCallback(props.post)}>
         delete
-      </button>
+      </CustomButton>
     </div>
   );
 }

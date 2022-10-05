@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react';
 import './App.css';
-import ErrorBox from './components/ErrorBox';
 import PostForm from './components/PostForm';
 import PostList from './components/PostList';
 import PostFilter from './components/PostFilter';
 import { compare, includeString } from './logic/filter';
+import CustomModal from './components/UI/modal/CustomModal';
+import CustomButton from './components/UI/button/CustomButton';
 
 function App() {
   const [posts, setPosts] = useState([
@@ -21,6 +22,8 @@ function App() {
       text: 'Vanilla JS is a fast, lightweight, cross-platform framework for building incredible, powerful JavaScript applications.',
     },
   ]);
+
+  const [modal, setModal] = useState(false);
 
   const [filter, setFilter] = useState({ sort: '', search: '' });
 
@@ -47,7 +50,8 @@ function App() {
     return tempPosts;
   }
 
-  function addNewPost(post) {
+  function addPost(post) {
+    setModal(false);
     post.id = getLastID();
     setPosts([...posts, post]);
   }
@@ -63,14 +67,12 @@ function App() {
 
   return (
     <div className="App">
-      <PostForm addPostCallback={addNewPost} />
-      <hr className="Divide" />
+      <CustomButton onClick={() => setModal(prev => !prev)}>Добавить пост</CustomButton>
+      <CustomModal visible={modal} setVisible={setModal}>
+        <PostForm addPost={addPost} />
+      </CustomModal>
       <PostFilter filter={filter} setFilter={setFilter} />
-      {sortedPosts.length !== 0 ? (
-        <PostList deletePostCallback={deletePost} title={'Programming Languages'} posts={sortedPosts} />
-      ) : (
-        <ErrorBox errorMessage={'Нет постов'} />
-      )}
+      <PostList deletePostCallback={deletePost} title={'Programming Languages'} posts={sortedPosts} />
     </div>
   );
 }

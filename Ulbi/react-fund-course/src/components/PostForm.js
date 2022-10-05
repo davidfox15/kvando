@@ -4,38 +4,28 @@ import CustomInput from './UI/input/CustomInput';
 import ErrorBox from './ErrorBox';
 import './PostForm.css';
 
-export default function PostForm(props) {
+export default function PostForm({ addPost }) {
   const [post, setPost] = useState({
     title: '',
     text: '',
   });
   const [inputError, setInputError] = useState('');
 
-  function updateTitleInput(inputValue) {
-    setPost({ ...post, title: inputValue });
-  }
-
-  function updateTextInput(inputValue) {
-    setPost({ ...post, text: inputValue });
-  }
-
-  function checkValidInput() {
+  function checkValidInput(...inputs) {
     const re = /^\S+(\w|\s)*\S$/;
-    if (re.exec(post.title) && re.exec(post.text)) return true;
-    return false;
+    return inputs.every(input => re.exec(input) && re.exec(input));
   }
 
-  function addPost() {
+  function createPost(event) {
+    event.preventDefault();
     setInputError('');
-    if (checkValidInput()) {
-      props.addPostCallback(post);
-      setPost({
-        title: '',
-        text: '',
-      });
-    } else {
-      setInputError('Invalid Input');
-    }
+    if (checkValidInput(post.title, post.text)) addPost(post);
+    else setInputError('Invalid Input');
+
+    setPost({
+      title: '',
+      text: '',
+    });
   }
 
   return (
@@ -44,22 +34,15 @@ export default function PostForm(props) {
         type="text"
         placeholder="Введите название"
         value={post.title}
-        onChange={inputValue => updateTitleInput(inputValue)}
+        onChange={inputValue => setPost({ ...post, title: inputValue })}
       />
       <CustomInput
         type="text"
         placeholder="Введите текст поста"
         value={post.text}
-        onChange={inputValue => updateTextInput(inputValue)}
+        onChange={inputValue => setPost({ ...post, text: inputValue })}
       />
-      <CustomButton
-        onClick={event => {
-          event.preventDefault();
-          addPost();
-        }}
-      >
-        Добавить пост
-      </CustomButton>
+      <CustomButton onClick={event => createPost(event)}>Добавить пост</CustomButton>
       {inputError && <ErrorBox errorMessage={inputError} />}
     </form>
   );
