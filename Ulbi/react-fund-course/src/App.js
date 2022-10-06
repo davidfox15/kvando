@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import PostForm from './components/PostForm';
 import PostList from './components/PostList';
@@ -8,20 +8,21 @@ import CustomButton from './components/UI/button/CustomButton';
 import { usePosts } from './hooks/usePosts';
 
 function App() {
-  const [posts, setPosts] = useState([
-    { id: 1, title: 'React', text: 'A JavaScript library for building user interfaces.' },
-    {
-      id: 2,
-      title: 'Vue',
-      text: 'An approachable, performant and versatile framework for building web user interfaces.',
-    },
-    { id: 3, title: 'Angular', text: 'Angular is a platform for building mobile and desktop web applications.' },
-    {
-      id: 4,
-      title: 'JS Vanilla',
-      text: 'Vanilla JS is a fast, lightweight, cross-platform framework for building incredible, powerful JavaScript applications.',
-    },
-  ]);
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/posts')
+      .then(res => res.json())
+      .then(json =>
+        json.map(item => ({
+          id: item.id,
+          title: item.title,
+          text: item.body,
+        }))
+      )
+      .then(posts => setPosts(posts))
+      .catch(e => console.log(e.message));
+  }, []);
 
   const [modal, setModal] = useState(false);
 
