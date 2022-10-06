@@ -6,29 +6,25 @@ import PostFilter from './components/PostFilter';
 import CustomModal from './components/UI/modal/CustomModal';
 import CustomButton from './components/UI/button/CustomButton';
 import { usePosts } from './hooks/usePosts';
+import PostService from './API/PostServiece';
 
 function App() {
   const [posts, setPosts] = useState([]);
-
-  useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/posts')
-      .then(res => res.json())
-      .then(json =>
-        json.map(item => ({
-          id: item.id,
-          title: item.title,
-          text: item.body,
-        }))
-      )
-      .then(posts => setPosts(posts))
-      .catch(e => console.log(e.message));
-  }, []);
 
   const [modal, setModal] = useState(false);
 
   const [filter, setFilter] = useState({ sort: '', search: '' });
 
   const sortedPosts = usePosts(posts, filter.sort, filter.search);
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  async function fetchPosts() {
+    const posts = await PostService.getAll();
+    setPosts(posts);
+  }
 
   function addPost(post) {
     setModal(false);
