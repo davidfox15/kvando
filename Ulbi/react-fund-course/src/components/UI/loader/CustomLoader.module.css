@@ -1,0 +1,23 @@
+.Loader {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  animation: pulse-ball 1.5s ease-in-out alternate infinite;
+}
+
+.Box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes pulse-ball {
+  from {
+    transform: scale(0.1);
+    background-color: rgb(0, 128, 128, 0.9);
+  }
+  to {
+    transform: scale(1.2);
+    background-color: rgba(100, 178, 178, 0.2)
+  }
+}
