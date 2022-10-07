@@ -7,26 +7,21 @@ import CustomModal from './components/UI/modal/CustomModal';
 import CustomButton from './components/UI/button/CustomButton';
 import { usePosts } from './hooks/usePosts';
 import PostService from './API/PostService';
+import useFetching from './hooks/useFetching';
 
 function App() {
   const [posts, setPosts] = useState([]);
-  const [isPostLoading, setIsPostLoading] = useState(false);
   const [modal, setModal] = useState(false);
   const [filter, setFilter] = useState({ sort: '', search: '' });
   const sortedPosts = usePosts(posts, filter.sort, filter.search);
-
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
-  async function fetchPosts() {
-    setIsPostLoading(true);
+  const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
     const posts = await PostService.getAll();
     setPosts(posts);
-    setTimeout(async () => {
-      setIsPostLoading(false);
-    }, 1000);
-  }
+  }, []);
+
+  useEffect(() => {
+    setPosts(fetchPosts);
+  }, []);
 
   function addPost(post) {
     setModal(false);
@@ -51,7 +46,7 @@ function App() {
       </CustomModal>
       <PostFilter filter={filter} setFilter={setFilter} />
       <AnimatedPostList
-        isPostLoading={isPostLoading}
+        isPostsLoading={isPostsLoading}
         deletePost={deletePost}
         title={'Programming Languages'}
         sortedPosts={sortedPosts}
