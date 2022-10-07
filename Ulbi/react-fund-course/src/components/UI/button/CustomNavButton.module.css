@@ -1,0 +1,8 @@
+.NavBtn {
+  width: 100px;
+  padding: 5px 15px;
+  border-radius: 5px;
+  background-color: teal;
+  border: none;
+  color: white;
+}

@@ -8,20 +8,30 @@ import CustomButton from './components/UI/button/CustomButton';
 import { usePosts } from './hooks/usePosts';
 import PostService from './API/PostService';
 import useFetching from './hooks/useFetching';
+import usePagination from './hooks/usePagination';
+import PostListNavigation from './components/PostListNavigation';
 
 function App() {
-  const [posts, setPosts] = useState([]);
   const [modal, setModal] = useState(false);
+
+  const [posts, setPosts] = useState([]);
   const [filter, setFilter] = useState({ sort: '', search: '' });
   const sortedPosts = usePosts(posts, filter.sort, filter.search);
+
+  const [totalCount, setTotalCount] = useState(100);
+  const [limit, setLimit] = useState(10);
+  const [chosenPage, setChosenPage] = useState(1);
+
+  const pages = usePagination(limit, totalCount);
+
   const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
-    const posts = await PostService.getAll();
+    const posts = await PostService.getPage(limit, chosenPage);
     setPosts(posts);
   }, []);
 
   useEffect(() => {
-    setPosts(fetchPosts);
-  }, []);
+    setPosts(fetchPosts());
+  }, [chosenPage]);
 
   function addPost(post) {
     setModal(false);
@@ -50,7 +60,15 @@ function App() {
         deletePost={deletePost}
         title={'Programming Languages'}
         sortedPosts={sortedPosts}
+        nav={{
+          pages,
+          setChosenPage,
+        }}
       />
+      {/* <PostListNavigation nav={{
+        pages,
+        setChosenPage
+      }} /> */}
     </div>
   );
 }
